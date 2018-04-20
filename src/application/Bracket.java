@@ -1,3 +1,4 @@
+package application;
 import java.util.ArrayList;
 
 public class Bracket {
@@ -9,6 +10,7 @@ public class Bracket {
 	public Bracket() {
 		bracket = new Team[0][0];
 		round = 0;
+		numOfTeams = 0;
 	}
 
 	public Bracket(int round) {
@@ -32,7 +34,8 @@ public class Bracket {
 	public Team[][] loadTeams(ArrayList<String> stringTeams) {
 		// create an arraylist of teams with team names and seeds
 		ArrayList<Team> teams = new ArrayList<Team>();
-		for (int i = 0; i < stringTeams.size(); i++) {
+		numOfTeams = stringTeams.size();
+		for (int i = 0; i < numOfTeams; i++) {
 			teams.add(new Team(stringTeams.get(i), i + 1));
 		}
 
@@ -167,5 +170,16 @@ public class Bracket {
 
 		}
 		return ret;
+	}
+	
+	public int getNumTeams() {
+		return numOfTeams;
+	}
+	
+	public String getTeam(int x, int y) {
+		if(x < 0 || x >= numOfTeams || y < 0 || y >= bracket[0].length) 
+			throw new ArrayIndexOutOfBoundsException();
+		else
+			return bracket[x][y].getTeamName();
 	}
 }
