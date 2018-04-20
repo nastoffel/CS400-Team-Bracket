@@ -24,36 +24,68 @@ public class Bracket {
 
 	}
 
-	public Team[][] loadTeams(ArrayList<String> teams) {
+	/**
+	 * loads all of the team names from an ArrayList of strings into the first collumn of the bracket
+	 * @param stringTeams ArrayList of string team names
+	 * @return the bracket 
+	 */
+	public Team[][] loadTeams(ArrayList<String> stringTeams) {
+		// create an arraylist of teams with team names and seeds
+		ArrayList<Team> teams = new ArrayList<Team>();
+		for (int i = 0; i < stringTeams.size(); i++) {
+			teams.add(new Team(stringTeams.get(i), i + 1));
+		}
+
+		// if there is more than 2 teams seed them
 		if (teams.size() > 2) {
 			teams = seedTeams(teams);
 		}
+		// enter the first round into the brackt [][] array of teams
 		for (int i = 0; i < numOfTeams; i++) {
-			bracket[i][0] = new Team(teams.get(i), i);
+			bracket[i][0] = teams.get(i);
 		}
 		return bracket;
 	}
 
+	/**
+	 * updates the winner of a specific game index depending on the highest score
+	 * @param gameIndex index of the game i.e.{(game 1: 1),(game 2: 3),(game 3: 5),(game 4: 7)}
+	 * @param t1Score score of top team in bracket
+	 * @param t2Score score of bottom team in bracket
+	 * @return the winning team
+	 */
 	public Team updateWinner(int gameIndex, int t1Score, int t2Score) {
+		// if all games from a single round have played
 		if (teamsLeft == numOfTeams / 2) {
+			// update private variable to reflect the new round
 			numOfTeams = teamsLeft;
 			round++;
 		}
+		// not sure if this is what we want to return forever but temporarily this is
+		// here
 		if (t1Score == t2Score) {
 			return null;
 		} else if (t1Score > t2Score) {
+			//if team 1 won then assign it to the next round relative to this games index
 			bracket[gameIndex / 2][round + 1] = bracket[gameIndex - 1][round];
 		} else
+			//if team 2 won then assign it to the next round relative to this games index
 			bracket[gameIndex / 2][round + 1] = bracket[gameIndex][round];
 		teamsLeft--;
 		return null;
 	}
 
-	private ArrayList<String> seedTeams(ArrayList<String> unSeededTeams) {
-		ArrayList<String> seededTeams = new ArrayList<String>();
+	/**
+	 * seeds all teams from an ArrayList of teams as described in the seeding guidlines
+	 * @param unSeededTeams list of teams that needs to be seeded
+	 * @return a seeded ArrayList of teams
+	 */
+	private ArrayList<Team> seedTeams(ArrayList<Team> unSeededTeams) {
+		ArrayList<Team> seededTeams = new ArrayList<Team>();
 		int size = unSeededTeams.size();
 
 		switch (size) {
+		// for a 4 team tourney
 		case 4: {
 			seededTeams.add(unSeededTeams.get(0));
 			seededTeams.add(unSeededTeams.get(3));
@@ -61,6 +93,7 @@ public class Bracket {
 			seededTeams.add(unSeededTeams.get(1));
 			break;
 		}
+		// for an 8 team tourney
 		case 8: {
 			// 1 vs 8
 			seededTeams.add(unSeededTeams.get(0));
@@ -78,6 +111,7 @@ public class Bracket {
 			break;
 
 		}
+		// for a 16 team tourney
 		case 16: {
 			// 1 vs 16
 			seededTeams.add(unSeededTeams.get(0));
@@ -111,6 +145,9 @@ public class Bracket {
 		return seededTeams;
 	}
 
+	/**
+	 * prints out a console text representation of what is in the bracket class
+	 */
 	public String toString() {
 		String ret = "";
 		System.out.println("_______________________________________________________________");
@@ -121,7 +158,7 @@ public class Bracket {
 						ret += "| ";
 					ret += " " + bracket[i][c].getTeamName() + " |";
 				} else
-					
+
 					ret += "   |";
 
 			}

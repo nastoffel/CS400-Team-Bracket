@@ -23,12 +23,23 @@ public class Main {
 //		teams.add("14");
 //		teams.add("15");
 //		teams.add("16");
-//		Bracket bball = new Bracket(2);
+//		Bracket bball = new Bracket(4);
 //		bball.loadTeams(teams);
 //		bball.updateWinner(1, 53, 65);
-//		bball.updateWinner(1, 66, 65);
 //		bball.updateWinner(3, 53, 65);
-//		
+//		bball.updateWinner(5, 53, 65);
+//		bball.updateWinner(7, 53, 65);
+//		bball.updateWinner(9, 53, 65);
+//		bball.updateWinner(11, 53, 65);
+//		bball.updateWinner(13, 53, 65);
+//		bball.updateWinner(15, 53, 65);
+//		bball.updateWinner(1, 53, 65);
+//		bball.updateWinner(3, 53, 65);
+//		bball.updateWinner(5, 53, 65);
+//		bball.updateWinner(7, 53, 65);
+//		bball.updateWinner(1, 53, 65);
+//		bball.updateWinner(3, 53, 65);
+//		bball.updateWinner(1, 53, 65);
 //		System.out.println(bball);
 
 	}
