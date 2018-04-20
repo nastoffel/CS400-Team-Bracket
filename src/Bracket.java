@@ -150,7 +150,7 @@ public class Bracket {
 	 */
 	public String toString() {
 		String ret = "";
-		System.out.println("_______________________________________________________________");
+		System.out.println("____________________________");
 		for (int i = 0; i < bracket.length; i++) {
 			for (int c = 0; c < bracket[0].length; c++) {
 				if (bracket[i][c] != null) {
@@ -158,11 +158,12 @@ public class Bracket {
 						ret += "| ";
 					ret += " " + bracket[i][c].getTeamName() + " |";
 				} else
-
-					ret += "   |";
+					ret += "    |";
 
 			}
+			
 			ret += "\n";
+			ret += "---------------------------\n";
 
 		}
 		return ret;

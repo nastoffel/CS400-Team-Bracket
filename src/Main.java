@@ -4,18 +4,18 @@ public class Main {
 
 	public static void main(String[] args) {
 //		ArrayList<String> teams = new ArrayList<String>();
-//		teams.add("1");
-//		teams.add("2");
+//		teams.add("01");
+//		teams.add("02");
 //		
-//		teams.add("3");
-//		teams.add("4");
+//		teams.add("03");
+//		teams.add("04");
 //		
-//		teams.add("5");
-//		teams.add("6");
-//		teams.add("7");
-//		teams.add("8");
+//		teams.add("05");
+//		teams.add("06");
+//		teams.add("07");
+//		teams.add("08");
 //		
-//		teams.add("9");
+//		teams.add("09");
 //		teams.add("10");
 //		teams.add("11");
 //		teams.add("12");
