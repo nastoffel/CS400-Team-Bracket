@@ -57,6 +57,7 @@ public class Main extends Application {
 			
 			Label blank = new Label();
 			
+			// Trying to get around the stupid grid pane collapsing
 //			for(int i = 0; i < bball.getNumTeams()*2+1; i++)
 //				gPane.add(new Label(), 0, i);
 //			for(int i = 0; i < ((Math.log(bball.getNumTeams()) / Math.log(2)) * 3) + 1; i++)
@@ -101,11 +102,15 @@ public class Main extends Application {
 	
 	private void slotSetup() {
 		
-		int numTeams = bball.getNumTeams();
-		int numGames = (int)(Math.log(bball.getNumTeams()) / Math.log(2)+1);
+		int numTeams = bball.getNumTeams(); // Used for # of rows for arrays
+		int numGames = (int)(Math.log(bball.getNumTeams()) / Math.log(2)+1); // Used for # of cols for arrays
+		
 		teamLabels = new Label[numTeams][numGames];
 		teamScores = new TextField[numTeams][numGames];
-		submitButtons = new Button[numTeams/2][numGames];
+		submitButtons = new Button[numTeams/2][numGames]; // Needs to be half as many rows for 
+				// 1 submit button per 2 teams
+		
+		//Testing code probably not needed anymore
 		int[][] num = new int[numTeams][numGames];
 		for(int i = 0; i < num.length; i++) {
 			for(int j = 0; j < num[i].length; j++) {
@@ -113,18 +118,19 @@ public class Main extends Application {
 			}
 		}
 		
+		// Initializes children for gridpane
 		for(int i = 0; i < numTeams; i++) {
-			teamLabels[i][0] = new Label(bball.getTeam(i, 0));
+			teamLabels[i][0] = new Label(bball.getTeam(i, 0)); // These inner-for loop lines put in the initial teams
 			teamScores[i][0] = new TextField();
 			teamLabels[i][0].setMinWidth(50);
-			teamLabels[i][0].setTextAlignment(TextAlignment.CENTER); // Doesn't work.
+			teamLabels[i][0].setTextAlignment(TextAlignment.RIGHT); // Doesn't work. Trying it to right align.
 			teamScores[i][0].setPromptText("Enter Score");
 			if(i%2 == 0)
 				submitButtons[i/2][0] = new Button("Submit");
-			for(int j = 1; j < numGames; j++) {
-				if(i < numTeams/(j+1)) {
-					teamLabels[i][j] = new Label("Winner Game ");
-					teamScores[i][j] = new TextField();
+			for(int j = 1; j < numGames; j++) { // Puts in children for remaining games
+				if(i < numTeams/(j+1)) { // Only puts in children for the amount of games to be played
+					teamLabels[i][j] = new Label("Winner Game "); // Label for winner of the previous game
+					teamScores[i][j] = new TextField(); // Blank score text field
 					if(i%2 == 0)
 						submitButtons[i/2][j] = new Button("Submit");
 				}
@@ -132,13 +138,13 @@ public class Main extends Application {
 		}
 		
 		
-		for(int i = 0; i < numTeams; i+=2) {
-			for(int j = 0; j < numGames-1; j++) {
-				if(teamLabels[i+1][j] != null) {
+		for(int i = 0; i < numTeams; i+=2) { // Goes up by 2 to add 2 teams per cycle
+			for(int j = 0; j < numGames-1; j++) { // Goes through every column except the winning team
+				if(teamLabels[i+1][j] != null) { // Only adds the children that have been constructed
 					gPane.add(new Label("Blank "), (j*4)+3, i*4);
 					gPane.add(teamLabels[i][j], (j*4)+1, (i*4)+1);
 					gPane.add(teamScores[i][j], (j*4)+2, (i*4)+1);
-					if(i%2 == 0)
+					if(i%2 == 0) // Only adds 1 submit button per 2 teams
 						gPane.add(submitButtons[i/2][j], (j*4)+2, (i*4)+2);
 					gPane.add(teamLabels[i+1][j], (j*4)+1, (i*4)+3);
 					gPane.add(teamScores[i+1][j], (j*4)+2, (i*4)+3);
