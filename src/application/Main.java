@@ -49,24 +49,8 @@ public class Main extends Application {
 		try {
 			primaryStage.setTitle("Tournament Bracket");
 			gPane = new GridPane();
-			Scene scene = new Scene(gPane, 1600, 1000, Color.DARKTURQUOISE);
-
-			// gPane.setGridLinesVisible(true);
-
-			// gPane.setMinHeight(bball.getNumTeams()*2+1);
-			// gPane.setMaxHeight(((Math.log(bball.getNumTeams()) / Math.log(2)) * 3) + 1);
-
-			Label blank = new Label();
-
-			// Trying to get around the stupid grid pane collapsing
-			// for(int i = 0; i < bball.getNumTeams()*2+1; i++)
-			// gPane.add(new Label(), 0, i);
-			// for(int i = 0; i < ((Math.log(bball.getNumTeams()) / Math.log(2)) * 3) + 1;
-			// i++)
-			// gPane.add(new Label(), i, 0);
-
+			Scene scene = new Scene(gPane, 1200, 800, Color.DARKTURQUOISE);
 			slotSetup();
-
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (Exception e) {
@@ -190,17 +174,5 @@ public class Main extends Application {
 				}
 			}
 		}
-		// Label winner = new Label("Winner: ");
-		// Label second = new Label("2nd Place: ");
-		// Label third = new Label("3rd Place: ");
-		// winner.setFont(Font.font(18));
-		// second.setFont(Font.font(18));
-		// third.setFont(Font.font(18));
-		// gPane.add(new VBox(winner,second,third), numTeams-5, numTeams + 20);
-		// gPane.add(winner, numTeams-5, numTeams + 20);
-		// gPane.add(second, numTeams-5, numTeams + 20);
-		// gPane.add(third, numTeams-5, numTeams + 20);
-		// gPane.add(teamLabels[0][numGames-1],1,1);
-
 	}
 }
