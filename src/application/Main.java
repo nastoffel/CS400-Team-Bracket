@@ -141,7 +141,7 @@ public class Main extends Application {
 			for (int j = 1; j < numGames - 1; j++) { // Puts in children for remaining games
 				if (j == 3) {
 					if (i < 2) {
-						teamLabels[i][j] = new Label("Winner Game "); // Label for winner of the previous game
+						teamLabels[i][j] = new Label("Winner of round " + j + " game " + (i+1)); // Label for winner of the previous game
 						teamScores[i][j] = new TextField(); // Blank score text field
 						if (i % 2 == 0)
 							submitButtons[i / 2][j] = new Button("Submit");
@@ -151,7 +151,7 @@ public class Main extends Application {
 
 					if (i < numTeams / (j + 1)) { // Only puts in children for the amount of games to be played
 
-						teamLabels[i][j] = new Label("Winner Game "); // Label for winner of the previous game
+						teamLabels[i][j] = new Label("Winner of round " + j + " game " + (i+1)); // Label for winner of the previous game
 						teamScores[i][j] = new TextField(); // Blank score text field
 						if (i % 2 == 0)
 							submitButtons[i / 2][j] = new Button("Submit");
