@@ -49,7 +49,7 @@ public class Main extends Application {
 		try {
 			primaryStage.setTitle("Tournament Bracket");
 			gPane = new GridPane();
-			Scene scene = new Scene(gPane, 800, 600, Color.DARKTURQUOISE);
+			Scene scene = new Scene(gPane, 1600, 1000, Color.DARKTURQUOISE);
 
 			// gPane.setGridLinesVisible(true);
 
@@ -146,20 +146,37 @@ public class Main extends Application {
 			teamLabels[i][0].setMinWidth(50);
 			teamLabels[i][0].setTextAlignment(TextAlignment.RIGHT); // Doesn't work. Trying it to right align.
 			teamScores[i][0].setPromptText("Enter Score");
+			Label winner = new Label("Winner: ");
+			Label second = new Label("2nd Place: ");
+			Label third = new Label("3rd Place: ");
+			winner.setFont(Font.font(18));
+			second.setFont(Font.font(18));
+			third.setFont(Font.font(18));
 			if (i % 2 == 0)
 				submitButtons[i / 2][0] = new Button("Submit");
-			for (int j = 1; j < numGames; j++) { // Puts in children for remaining games
+			for (int j = 1; j < numGames - 1; j++) { // Puts in children for remaining games
+				if (j == 3) {
+					if (i < 2) {
+						teamLabels[i][j] = new Label("Winner Game "); // Label for winner of the previous game
+						teamScores[i][j] = new TextField(); // Blank score text field
+						if (i % 2 == 0)
+							submitButtons[i / 2][j] = new Button("Submit");
+					}
 
-				if (i < numTeams / (j + 1)) { // Only puts in children for the amount of games to be played
-					teamLabels[i][j] = new Label("Winner Game "); // Label for winner of the previous game
-					teamScores[i][j] = new TextField(); // Blank score text field
-					if (i % 2 == 0)
-						submitButtons[i / 2][j] = new Button("Submit");
+				} else {
+
+					if (i < numTeams / (j + 1)) { // Only puts in children for the amount of games to be played
+
+						teamLabels[i][j] = new Label("Winner Game "); // Label for winner of the previous game
+						teamScores[i][j] = new TextField(); // Blank score text field
+						if (i % 2 == 0)
+							submitButtons[i / 2][j] = new Button("Submit");
+
+					}
 				}
-				
 			}
-		}
 
+		}
 		for (int i = 0; i < numTeams; i += 2) { // Goes up by 2 to add 2 teams per cycle
 			for (int j = 0; j < numGames - 1; j++) { // Goes through every column except the winning team
 				if (teamLabels[i + 1][j] != null) { // Only adds the children that have been constructed
@@ -173,6 +190,16 @@ public class Main extends Application {
 				}
 			}
 		}
+		// Label winner = new Label("Winner: ");
+		// Label second = new Label("2nd Place: ");
+		// Label third = new Label("3rd Place: ");
+		// winner.setFont(Font.font(18));
+		// second.setFont(Font.font(18));
+		// third.setFont(Font.font(18));
+		// gPane.add(new VBox(winner,second,third), numTeams-5, numTeams + 20);
+		// gPane.add(winner, numTeams-5, numTeams + 20);
+		// gPane.add(second, numTeams-5, numTeams + 20);
+		// gPane.add(third, numTeams-5, numTeams + 20);
 		// gPane.add(teamLabels[0][numGames-1],1,1);
 
 	}
