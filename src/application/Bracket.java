@@ -6,11 +6,13 @@ public class Bracket {
 	private int round;
 	private int numOfTeams;
 	private int teamsLeft;
+	private int currentRound;
 
 	public Bracket() {
 		bracket = new Team[0][0];
 		round = 0;
 		numOfTeams = 0;
+		currentRound = 0;
 	}
 
 	public Bracket(int round) {
@@ -22,6 +24,7 @@ public class Bracket {
 			bracket = new Team[2][round + 1];
 		}
 		this.round = 0;
+		this.currentRound = 0;
 		this.teamsLeft = numOfTeams;
 
 	}
@@ -174,6 +177,14 @@ public class Bracket {
 	
 	public int getNumTeams() {
 		return numOfTeams;
+	}
+	public int getCurrRound()
+	{
+		return currentRound;
+	}
+	public void nextRound()
+	{
+		currentRound++;
 	}
 	
 	public String getTeam(int x, int y) {

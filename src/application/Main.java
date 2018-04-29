@@ -15,7 +15,10 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -52,7 +55,7 @@ public class Main extends Application {
 			primaryStage.setTitle("Tournament Bracket");
 			gPane = new GridPane();
 			gPane.setPadding(new Insets(10,10,10,10));
-			Scene scene = new Scene(gPane, 1400, 1000, Color.WHITE);
+			Scene scene = new Scene(gPane, 1200, 700, Color.WHITE);
 			slotSetup();
 			primaryStage.setScene(scene);
 			primaryStage.show();
@@ -145,7 +148,7 @@ public class Main extends Application {
 					for (int j = 1; j < numRounds - 1; j++) { // Puts in children for remaining games
 						if (j == 3) {
 							if (i < 2) {
-								teamLabels[i][j] = new Label("Winner Prev Game "); // Label for winner of the previous game
+								teamLabels[i][j] = new Label(""); // Label for winner of the previous game
 								teamScores[i][j] = new TextField(); // Blank score text field
 								teamScores[i][j].setMaxWidth(75);
 								if (i % 2 == 0)
@@ -156,7 +159,7 @@ public class Main extends Application {
 
 							if (i < numTeams / (j + 1)) { // Only puts in children for the amount of games to be played
 
-								teamLabels[i][j] = new Label("Winner Prev Game "); // Label for winner of the previous game
+								teamLabels[i][j] = new Label(""); // Label for winner of the previous game
 								teamScores[i][j] = new TextField(); // Blank score text field
 								teamScores[i][j].setMaxWidth(75);
 								if (i % 2 == 0)
@@ -225,11 +228,35 @@ public class Main extends Application {
 				submit.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent actionEvent) {
-					if(submit.getText().equals("Submit") && isNum(team1.getText()) && isNum(team2.getText())) {
-						System.out.println("Oi");
+					if(!isNum(team1Score.getText()) && !isNum(team2Score.getText()))
+					{
+						Alert alert = new Alert(AlertType.WARNING, "Input must be an integer");
+						alert.showAndWait().filter(response -> response == ButtonType.OK);
+					}
+					if(submit.getText().equals("Submit") && isNum(team1Score.getText()) && isNum(team2Score.getText())) {
+						if(Integer.valueOf(team1Score.getText()) > Integer.valueOf(team2Score.getText()))
+						{
+							win.setText(team1.getText());
+							submit.setText("");
+							next.setText("Submit");
+						}
+						else if(Integer.valueOf(team1Score.getText()) == Integer.valueOf(team2Score.getText()))
+						{
+							Alert alert = new Alert(AlertType.WARNING, "Team Scores are the same");
+							alert.showAndWait().filter(response -> response == ButtonType.OK);
+						}
+						else
+						{
+							win.setText(team2.getText());
+							submit.setText("");
+							next.setText("Submit");
+						}
+				
 					}
 					else
-						System.out.println("Meme");
+						{
+							
+						}
 				}
 			});
 	}
