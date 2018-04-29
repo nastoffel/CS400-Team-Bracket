@@ -48,14 +48,14 @@ public class Main extends Application {
 	private Button[][] submitButtons;
 	private Label[][] gameLabels;
 	private Label winner, second, third;
-
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			primaryStage.setTitle("Tournament Bracket");
 			gPane = new GridPane();
 			gPane.setPadding(new Insets(10,10,10,10));
-			Scene scene = new Scene(gPane, 1200, 700, Color.WHITE);
+			Scene scene = new Scene(gPane, 1400, 1000, Color.WHITE);
 			slotSetup();
 			primaryStage.setScene(scene);
 			primaryStage.show();
@@ -142,13 +142,12 @@ public class Main extends Application {
 					teamLabels[i][0].setMinWidth(50);
 					teamScores[i][0].setMaxWidth(75);
 					teamScores[i][0].setPromptText("Enter Score");
-					if (i % 2 == 0) {
+					if (i % 2 == 0)
 						submitButtons[i / 2][0] = new Button("Submit");
-					}
 					for (int j = 1; j < numRounds - 1; j++) { // Puts in children for remaining games
 						if (j == 3) {
 							if (i < 2) {
-								teamLabels[i][j] = new Label(""); // Label for winner of the previous game
+								teamLabels[i][j] = new Label("Winner Prev Game "); // Label for winner of the previous game
 								teamScores[i][j] = new TextField(); // Blank score text field
 								teamScores[i][j].setMaxWidth(75);
 								if (i % 2 == 0)
@@ -159,7 +158,7 @@ public class Main extends Application {
 
 							if (i < numTeams / (j + 1)) { // Only puts in children for the amount of games to be played
 
-								teamLabels[i][j] = new Label(""); // Label for winner of the previous game
+								teamLabels[i][j] = new Label("Winner Prev Game "); // Label for winner of the previous game
 								teamScores[i][j] = new TextField(); // Blank score text field
 								teamScores[i][j].setMaxWidth(75);
 								if (i % 2 == 0)
@@ -186,9 +185,12 @@ public class Main extends Application {
 							gPane.add(teamLabels[i][j], (j * 4) + 2, (i * 4) + 1);
 							gPane.add(teamScores[i][j], (j * 4) + 3, (i * 4) + 1);
 							if(j<numRounds-2)
-								action(submitButtons[i/2][j],teamLabels[i][j], teamScores[i][j],teamLabels[i+1][j], teamScores[i+1][j], teamLabels[i/2][j+1], submitButtons[i/4][j+1]);
+								action(submitButtons[i/2][j],teamLabels[i][j], teamScores[i][j],
+										teamLabels[i+1][j], teamScores[i+1][j], teamLabels[i/2][j+1],
+										submitButtons[i/4][j+1]);
 							else
-								System.out.println("Winner Button");
+								winnerAction(submitButtons[i/2][j],teamLabels[i][j], teamScores[i][j],
+										teamLabels[i+1][j], teamScores[i+1][j]);
 							gPane.add(submitButtons[i / 2][j], (j * 4) + 3, (i * 4) + 2);
 							gPane.add(teamLabels[i + 1][j], (j * 4) + 2, (i * 4) + 3);
 							gPane.add(teamScores[i + 1][j], (j * 4) + 3, (i * 4) + 3);
@@ -225,39 +227,92 @@ public class Main extends Application {
 	
 	private void action(Button submit, Label team1, TextField team1Score, Label team2, TextField team2Score, Label win, Button next)
 	{
-				submit.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent actionEvent) {
-					if(!isNum(team1Score.getText()) && !isNum(team2Score.getText()))
+		submit.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				if(!(submit.getText().equals("Submit") || next.getText().equals("Needs Other Team")))
+				{
+					Alert alert = new Alert(AlertType.WARNING, "Cannot submit without previous games played.");
+					alert.showAndWait().filter(response -> response == ButtonType.OK);
+				}
+				else if(isNum(team1Score.getText()) && isNum(team2Score.getText())) {
+					if(Integer.valueOf(team1Score.getText()) > Integer.valueOf(team2Score.getText()))
 					{
-						Alert alert = new Alert(AlertType.WARNING, "Input must be an integer");
+						win.setText(team1.getText());
+						team1Score.setEditable(false);
+						team2Score.setEditable(false);
+						submit.setText("");
+						if(next.getText().equals("Needs Other Team"))
+							next.setText("Submit");
+						else
+							next.setText("Needs Other Team");
+					}
+					else if(Integer.valueOf(team1Score.getText()) == Integer.valueOf(team2Score.getText()))
+					{
+						Alert alert = new Alert(AlertType.WARNING, "Team Scores are the same.");
 						alert.showAndWait().filter(response -> response == ButtonType.OK);
 					}
-					if(submit.getText().equals("Submit") && isNum(team1Score.getText()) && isNum(team2Score.getText())) {
-						if(Integer.valueOf(team1Score.getText()) > Integer.valueOf(team2Score.getText()))
-						{
-							win.setText(team1.getText());
-							submit.setText("");
+					else
+					{
+						win.setText(team2.getText());
+						team1Score.setEditable(false);
+						team2Score.setEditable(false);
+						submit.setText("");
+						if(next.getText().equals("Needs Other Team"))
 							next.setText("Submit");
-						}
-						else if(Integer.valueOf(team1Score.getText()) == Integer.valueOf(team2Score.getText()))
-						{
-							Alert alert = new Alert(AlertType.WARNING, "Team Scores are the same");
-							alert.showAndWait().filter(response -> response == ButtonType.OK);
-						}
 						else
-						{
-							win.setText(team2.getText());
-							submit.setText("");
-							next.setText("Submit");
-						}
-				
+							next.setText("Needs Other Team");
+					}
+
+				}
+				else
+				{
+					Alert alert = new Alert(AlertType.WARNING, "Input must be an integer.");
+					alert.showAndWait().filter(response -> response == ButtonType.OK);
+				}
+			}
+		});
+	}
+	private void winnerAction(Button submit, Label team1, TextField team1Score, Label team2, TextField team2Score) 
+	{
+		submit.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				if(!(submit.getText().equals("Submit")))
+				{
+					Alert alert = new Alert(AlertType.WARNING, "Cannot submit without previous games played.");
+					alert.showAndWait().filter(response -> response == ButtonType.OK);
+				}
+				else if(isNum(team1Score.getText()) && isNum(team2Score.getText())) {
+					if(Integer.valueOf(team1Score.getText()) > Integer.valueOf(team2Score.getText()))
+					{
+						team1Score.setEditable(false);
+						team2Score.setEditable(false);
+						submit.setText("");
+						winner.setText(winner.getText()+team1.getText());
+						second.setText(second.getText()+team2.getText());
+					}
+					else if(Integer.valueOf(team1Score.getText()) == Integer.valueOf(team2Score.getText()))
+					{
+						Alert alert = new Alert(AlertType.WARNING, "Team Scores are the same.");
+						alert.showAndWait().filter(response -> response == ButtonType.OK);
 					}
 					else
-						{
-							
-						}
+					{
+						team1Score.setEditable(false);
+						team2Score.setEditable(false);
+						submit.setText("");
+						winner.setText(winner.getText()+team2.getText());
+						second.setText(second.getText()+team1.getText());
+					}
+
 				}
-			});
+				else
+				{
+					Alert alert = new Alert(AlertType.WARNING, "Input must be an integer.");
+					alert.showAndWait().filter(response -> response == ButtonType.OK);
+				}
+			}
+		});
 	}
 }
