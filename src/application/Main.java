@@ -52,7 +52,7 @@ public class Main extends Application {
 			primaryStage.setTitle("Tournament Bracket");
 			gPane = new GridPane();
 			gPane.setPadding(new Insets(10,10,10,10));
-			Scene scene = new Scene(gPane, 1400, 800, Color.DARKTURQUOISE);
+			Scene scene = new Scene(gPane, 1400, 1000, Color.WHITE);
 			slotSetup();
 			primaryStage.setScene(scene);
 			primaryStage.show();
@@ -139,8 +139,9 @@ public class Main extends Application {
 					teamLabels[i][0].setMinWidth(50);
 					teamScores[i][0].setMaxWidth(75);
 					teamScores[i][0].setPromptText("Enter Score");
-					if (i % 2 == 0)
+					if (i % 2 == 0) {
 						submitButtons[i / 2][0] = new Button("Submit");
+					}
 					for (int j = 1; j < numRounds - 1; j++) { // Puts in children for remaining games
 						if (j == 3) {
 							if (i < 2) {
@@ -181,6 +182,10 @@ public class Main extends Application {
 							gPane.add(gameLabels[i/2][j], (j * 4), i * 4);
 							gPane.add(teamLabels[i][j], (j * 4) + 2, (i * 4) + 1);
 							gPane.add(teamScores[i][j], (j * 4) + 3, (i * 4) + 1);
+							if(j<numRounds-2)
+								action(submitButtons[i/2][j], teamScores[i][j], teamScores[i+1][j], teamLabels[i/2][j+1], submitButtons[i/4][j+1]);
+							else
+								System.out.println("Winner Button");
 							gPane.add(submitButtons[i / 2][j], (j * 4) + 3, (i * 4) + 2);
 							gPane.add(teamLabels[i + 1][j], (j * 4) + 2, (i * 4) + 3);
 							gPane.add(teamScores[i + 1][j], (j * 4) + 3, (i * 4) + 3);
@@ -201,5 +206,31 @@ public class Main extends Application {
 			}
 		}
 
+	}
+	
+	private boolean isNum(String s)
+	{
+		if(s.isEmpty())
+			return false;
+	    for (char c : s.toCharArray())
+	    {
+	        if (!Character.isDigit(c)) 
+	        	return false;
+	    }
+	    return true;
+	}
+	
+	private void action(Button submit, TextField team1, TextField team2, Label win, Button next)
+	{
+				submit.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent actionEvent) {
+					if(submit.getText().equals("Submit") && isNum(team1.getText()) && isNum(team2.getText())) {
+						System.out.println("Oi");
+					}
+					else
+						System.out.println("Meme");
+				}
+			});
 	}
 }
