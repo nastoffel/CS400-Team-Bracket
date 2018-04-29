@@ -183,7 +183,7 @@ public class Main extends Application {
 							gPane.add(teamLabels[i][j], (j * 4) + 2, (i * 4) + 1);
 							gPane.add(teamScores[i][j], (j * 4) + 3, (i * 4) + 1);
 							if(j<numRounds-2)
-								action(submitButtons[i/2][j], teamScores[i][j], teamScores[i+1][j], teamLabels[i/2][j+1], submitButtons[i/4][j+1]);
+								action(submitButtons[i/2][j],teamLabels[i][j], teamScores[i][j],teamLabels[i+1][j], teamScores[i+1][j], teamLabels[i/2][j+1], submitButtons[i/4][j+1]);
 							else
 								System.out.println("Winner Button");
 							gPane.add(submitButtons[i / 2][j], (j * 4) + 3, (i * 4) + 2);
@@ -220,7 +220,7 @@ public class Main extends Application {
 	    return true;
 	}
 	
-	private void action(Button submit, TextField team1, TextField team2, Label win, Button next)
+	private void action(Button submit, Label team1, TextField team1Score, Label team2, TextField team2Score, Label win, Button next)
 	{
 				submit.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
