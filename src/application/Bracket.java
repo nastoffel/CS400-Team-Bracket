@@ -71,7 +71,7 @@ public class Bracket {
 		// here
 		if (t1Score == t2Score) {
 			return null;
-		} else if (t1Score > t2Score) {
+		} else if (t1Score < t2Score) {
 			//if team 1 won then assign it to the next round relative to this games index
 			bracket[gameIndex / 2][round + 1] = bracket[gameIndex - 1][round];
 		} else
@@ -186,8 +186,13 @@ public class Bracket {
 	{
 		currentRound++;
 	}
-	
-	public String getTeam(int x, int y) {
+	public Team getTeam(int x, int y) {
+		if(x < 0 || x >= numOfTeams || y < 0 || y >= bracket[0].length) 
+			throw new ArrayIndexOutOfBoundsException();
+		else
+			return bracket[x][y];
+	}
+	public String getTeamName(int x, int y) {
 		if(x < 0 || x >= numOfTeams || y < 0 || y >= bracket[0].length) 
 			throw new ArrayIndexOutOfBoundsException();
 		else
