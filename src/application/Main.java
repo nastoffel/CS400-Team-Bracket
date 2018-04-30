@@ -48,13 +48,13 @@ public class Main extends Application {
 	private Button[][] submitButtons;
 	private Label[][] gameLabels;
 	private Label winner, second, third;
-	
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			primaryStage.setTitle("Tournament Bracket");
 			gPane = new GridPane();
-			gPane.setPadding(new Insets(10,10,10,10));
+			gPane.setPadding(new Insets(10, 10, 10, 10));
 			Scene scene = new Scene(gPane, 1400, 1000, Color.WHITE);
 			slotSetup();
 			primaryStage.setScene(scene);
@@ -68,7 +68,11 @@ public class Main extends Application {
 		ArrayList<String> teams = new ArrayList<String>();
 
 		if (args.length == 0) {
-			File file = new File("src\\application\\Teams\\16Team.txt"); // Change the name to get the correct team#
+			File file = new File("\\src\\application\\16Team"); // Change the
+																										// name to
+																										// get the
+																										// correct
+																										// team#
 			try {
 				Scanner scan = new Scanner(file);
 				while (scan.hasNextLine()) {
@@ -90,7 +94,7 @@ public class Main extends Application {
 				System.out.println("file not found");
 			}
 		}
-		
+
 		int round = 0;
 		switch (teams.size()) {
 		case 1:
@@ -118,26 +122,27 @@ public class Main extends Application {
 	private void slotSetup() {
 
 		int numTeams = bball.getNumTeams(); // Used for # of rows for arrays
-		if(numTeams > 0) {
+		if (numTeams > 0) {
 			winner = new Label("Winner: ");
 			second = new Label("Second: ");
 			third = new Label("Third: ");
 			winner.setFont(Font.font(18));
 			second.setFont(Font.font(18));
 			third.setFont(Font.font(18));
-			
-			if(numTeams > 1) {
+
+			if (numTeams > 1) {
 				int numRounds = (int) (Math.log(numTeams) / Math.log(2) + 1); // Used for # of cols for arrays
 
-				teamLabels = new Label[numTeams+1][numRounds];
+				teamLabels = new Label[numTeams + 1][numRounds];
 				teamScores = new TextField[numTeams][numRounds];
 				submitButtons = new Button[numTeams / 2][numRounds]; // Needs to be half as many rows for
 				// 1 submit button per 2 teams
-				gameLabels = new Label[numTeams/2][numRounds];
+				gameLabels = new Label[numTeams / 2][numRounds];
 
 				// Initializes children for gridpane
 				for (int i = 0; i < numTeams; i++) {
-					teamLabels[i][0] = new Label(bball.getTeam(i, 0)); // These inner-for loop lines put in the initial teams
+					teamLabels[i][0] = new Label(bball.getTeamName(i, 0)); // These inner-for loop lines put in the
+																			// initial teams
 					teamScores[i][0] = new TextField();
 					teamLabels[i][0].setMinWidth(50);
 					teamScores[i][0].setMaxWidth(75);
@@ -147,7 +152,8 @@ public class Main extends Application {
 					for (int j = 1; j < numRounds - 1; j++) { // Puts in children for remaining games
 						if (j == 3) {
 							if (i < 2) {
-								teamLabels[i][j] = new Label("Winner Prev Game "); // Label for winner of the previous game
+								teamLabels[i][j] = new Label("Winner Prev Game "); // Label for winner of the previous
+																					// game
 								teamScores[i][j] = new TextField(); // Blank score text field
 								teamScores[i][j].setMaxWidth(75);
 								if (i % 2 == 0)
@@ -158,7 +164,8 @@ public class Main extends Application {
 
 							if (i < numTeams / (j + 1)) { // Only puts in children for the amount of games to be played
 
-								teamLabels[i][j] = new Label("Winner Prev Game "); // Label for winner of the previous game
+								teamLabels[i][j] = new Label("Winner Prev Game "); // Label for winner of the previous
+																					// game
 								teamScores[i][j] = new TextField(); // Blank score text field
 								teamScores[i][j].setMaxWidth(75);
 								if (i % 2 == 0)
@@ -171,9 +178,9 @@ public class Main extends Application {
 
 				int games = 0;
 
-				for(int col = 0; col < numRounds - 1; col++) {
-					for(int row = 0; row < numTeams/Math.pow(2, col+1); row++) {
-						games ++;
+				for (int col = 0; col < numRounds - 1; col++) {
+					for (int row = 0; row < numTeams / Math.pow(2, col + 1); row++) {
+						games++;
 						gameLabels[row][col] = new Label("Game " + games);
 					}
 				}
@@ -181,16 +188,18 @@ public class Main extends Application {
 				for (int i = 0; i < numTeams; i += 2) { // Goes up by 2 to add 2 teams per cycle
 					for (int j = 0; j < numRounds - 1; j++) { // Goes through every column except the winning team
 						if (teamLabels[i + 1][j] != null) { // Only adds the children that have been constructed
-							gPane.add(gameLabels[i/2][j], (j * 4), i * 4);
+							gPane.add(gameLabels[i / 2][j], (j * 4), i * 4);
 							gPane.add(teamLabels[i][j], (j * 4) + 2, (i * 4) + 1);
 							gPane.add(teamScores[i][j], (j * 4) + 3, (i * 4) + 1);
-							if(j<numRounds-2)
-								action(submitButtons[i/2][j],teamLabels[i][j], teamScores[i][j],
-										teamLabels[i+1][j], teamScores[i+1][j], teamLabels[i/2][j+1],
-										submitButtons[i/4][j+1]);
-							else
-								winnerAction(submitButtons[i/2][j],teamLabels[i][j], teamScores[i][j],
-										teamLabels[i+1][j], teamScores[i+1][j]);
+							if (j < numRounds - 2) {
+								action(submitButtons[i / 2][j], teamLabels[i][j], teamScores[i][j],
+										teamLabels[i + 1][j], teamScores[i + 1][j], teamLabels[i / 2][j + 1],
+										submitButtons[i / 4][j + 1], i, j);
+
+							} else
+								winnerAction(submitButtons[i / 2][j], teamLabels[i][j], teamScores[i][j],
+										teamLabels[i + 1][j], teamScores[i + 1][j], i, j);
+
 							gPane.add(submitButtons[i / 2][j], (j * 4) + 3, (i * 4) + 2);
 							gPane.add(teamLabels[i + 1][j], (j * 4) + 2, (i * 4) + 3);
 							gPane.add(teamScores[i + 1][j], (j * 4) + 3, (i * 4) + 3);
@@ -198,121 +207,151 @@ public class Main extends Application {
 					}
 				}
 
-				gPane.add(new Label("Placements "), ((numRounds-1) * 4), 0);
+				gPane.add(new Label("Placements "), ((numRounds - 1) * 4), 0);
 
-				gPane.add(winner, ((numRounds-1) * 4) +1, 1);
-				gPane.add(second, ((numRounds-1) * 4) +1, 2);
-				if(numTeams > 2)
-					gPane.add(third, ((numRounds-1) * 4) +1, 3);
-			}
-			else {
+				gPane.add(winner, ((numRounds - 1) * 4) + 1, 1);
+				gPane.add(second, ((numRounds - 1) * 4) + 1, 2);
+				if (numTeams > 2)
+					gPane.add(third, ((numRounds - 1) * 4) + 1, 3);
+			} else {
 				winner.setText(winner.getText() + bball.getTeam(0, 0));
 				gPane.add(winner, 0, 0);
 			}
 		}
 
 	}
-	
-	private boolean isNum(String s)
-	{
-		if(s.isEmpty())
+
+	private boolean isNum(String s) {
+		if (s.isEmpty())
 			return false;
-	    for (char c : s.toCharArray())
-	    {
-	        if (!Character.isDigit(c)) 
-	        	return false;
-	    }
-	    return true;
+		for (char c : s.toCharArray()) {
+			if (!Character.isDigit(c))
+				return false;
+		}
+		return true;
 	}
-	
-	private void action(Button submit, Label team1, TextField team1Score, Label team2, TextField team2Score, Label win, Button next)
-	{
+
+	private void action(Button submit, Label team1, TextField team1Score, Label team2, TextField team2Score, Label win,
+			Button next, int row, int col) {
 		submit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
-				if(!(submit.getText().equals("Submit") || next.getText().equals("Needs Other Team")))
-				{
+				if (!(submit.getText().equals("Submit") || next.getText().equals("Needs Other Team"))) {
 					Alert alert = new Alert(AlertType.WARNING, "Cannot submit without previous games played.");
 					alert.showAndWait().filter(response -> response == ButtonType.OK);
-				}
-				else if(isNum(team1Score.getText()) && isNum(team2Score.getText())) {
-					if(Integer.valueOf(team1Score.getText()) > Integer.valueOf(team2Score.getText()))
-					{
+				} else if (isNum(team1Score.getText()) && isNum(team2Score.getText())) {
+					if (Integer.valueOf(team1Score.getText()) > Integer.valueOf(team2Score.getText())) {
+						bball.getTeam(row, col).setScore(Integer.parseInt(team1Score.getText()));
+						bball.getTeam(row + 1, col).setScore(Integer.parseInt(team2Score.getText()));
+						bball.updateWinner(row + 1, Integer.parseInt(team2Score.getText()),
+								Integer.parseInt(team1Score.getText()));
 						win.setText(team1.getText());
 						team1Score.setEditable(false);
 						team2Score.setEditable(false);
 						submit.setText("");
-						if(next.getText().equals("Needs Other Team"))
+						if (next.getText().equals("Needs Other Team"))
 							next.setText("Submit");
 						else
 							next.setText("Needs Other Team");
-					}
-					else if(Integer.valueOf(team1Score.getText()) == Integer.valueOf(team2Score.getText()))
-					{
+					} else if (Integer.valueOf(team1Score.getText()) == Integer.valueOf(team2Score.getText())) {
 						Alert alert = new Alert(AlertType.WARNING, "Team Scores are the same.");
 						alert.showAndWait().filter(response -> response == ButtonType.OK);
-					}
-					else
-					{
+					} else {
+						bball.getTeam(row, col).setScore(Integer.parseInt(team1Score.getText()));
+						bball.getTeam(row + 1, col).setScore(Integer.parseInt(team2Score.getText()));
+						bball.updateWinner(row + 1, Integer.parseInt(team2Score.getText()),
+								Integer.parseInt(team1Score.getText()));
 						win.setText(team2.getText());
 						team1Score.setEditable(false);
 						team2Score.setEditable(false);
 						submit.setText("");
-						if(next.getText().equals("Needs Other Team"))
+						if (next.getText().equals("Needs Other Team"))
 							next.setText("Submit");
 						else
 							next.setText("Needs Other Team");
 					}
 
-				}
-				else
-				{
+				} else {
 					Alert alert = new Alert(AlertType.WARNING, "Input must be an integer.");
 					alert.showAndWait().filter(response -> response == ButtonType.OK);
 				}
+				System.out.print(bball);
 			}
+
 		});
 	}
-	private void winnerAction(Button submit, Label team1, TextField team1Score, Label team2, TextField team2Score) 
-	{
+
+	private void winnerAction(Button submit, Label team1, TextField team1Score, Label team2, TextField team2Score,
+			int row, int col) {
 		submit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
-				if(!(submit.getText().equals("Submit")))
-				{
+				if (!(submit.getText().equals("Submit"))) {
 					Alert alert = new Alert(AlertType.WARNING, "Cannot submit without previous games played.");
 					alert.showAndWait().filter(response -> response == ButtonType.OK);
-				}
-				else if(isNum(team1Score.getText()) && isNum(team2Score.getText())) {
-					if(Integer.valueOf(team1Score.getText()) > Integer.valueOf(team2Score.getText()))
-					{
+				} else if (isNum(team1Score.getText()) && isNum(team2Score.getText())) {
+					if (Integer.valueOf(team1Score.getText()) > Integer.valueOf(team2Score.getText())) {
+						if (bball.getNumTeams() > 2) {
+							String thirdPlace = "";
+
+							double maxScore = (int) Math.max(
+									Math.min(bball.getTeam(row, col - 1).getScore(),
+											bball.getTeam(row + 1, col - 1).getScore()),
+									Math.min(bball.getTeam(row + 2, col - 1).getScore(),
+											bball.getTeam(row + 3, col - 1).getScore()));
+							if (bball.getTeam(row, col - 1).getScore() == maxScore) {
+								thirdPlace = bball.getTeam(row, col - 1).getTeamName();
+							} else if (bball.getTeam(row + 1, col - 1).getScore() == maxScore) {
+								thirdPlace = bball.getTeam(row + 1, col - 1).getTeamName();
+							} else if (bball.getTeam(row + 2, col - 1).getScore() == maxScore) {
+								thirdPlace = bball.getTeam(row + 2, col - 1).getTeamName();
+							} else {
+								thirdPlace = bball.getTeam(row + 3, col - 1).getTeamName();
+							}
+
+							third.setText(third.getText() + thirdPlace);
+						}
 						team1Score.setEditable(false);
 						team2Score.setEditable(false);
 						submit.setText("");
-						winner.setText(winner.getText()+team1.getText());
-						second.setText(second.getText()+team2.getText());
-					}
-					else if(Integer.valueOf(team1Score.getText()) == Integer.valueOf(team2Score.getText()))
-					{
+						winner.setText(winner.getText() + team1.getText());
+						second.setText(second.getText() + team2.getText());
+					} else if (Integer.valueOf(team1Score.getText()) == Integer.valueOf(team2Score.getText())) {
 						Alert alert = new Alert(AlertType.WARNING, "Team Scores are the same.");
 						alert.showAndWait().filter(response -> response == ButtonType.OK);
-					}
-					else
-					{
+					} else {
+						if (bball.getNumTeams() > 2) {
+							String thirdPlace = "";
+							double maxScore = (int) Math.max(
+									Math.min(bball.getTeam(row, col - 1).getScore(),
+											bball.getTeam(row + 1, col - 1).getScore()),
+									Math.min(bball.getTeam(row + 2, col - 1).getScore(),
+											bball.getTeam(row + 3, col - 1).getScore()));
+							if (bball.getTeam(row, col - 1).getScore() == maxScore) {
+								thirdPlace = bball.getTeam(row, col - 1).getTeamName();
+							} else if (bball.getTeam(row + 1, col - 1).getScore() == maxScore) {
+								thirdPlace = bball.getTeam(row + 1, col - 1).getTeamName();
+							} else if (bball.getTeam(row + 2, col - 1).getScore() == maxScore) {
+								thirdPlace = bball.getTeam(row + 2, col - 1).getTeamName();
+							} else {
+								thirdPlace = bball.getTeam(row + 3, col - 1).getTeamName();
+							}
+							third.setText(third.getText() + thirdPlace);
+						}
 						team1Score.setEditable(false);
 						team2Score.setEditable(false);
 						submit.setText("");
-						winner.setText(winner.getText()+team2.getText());
-						second.setText(second.getText()+team1.getText());
+						winner.setText(winner.getText() + team2.getText());
+						second.setText(second.getText() + team1.getText());
 					}
 
-				}
-				else
-				{
+				} else {
 					Alert alert = new Alert(AlertType.WARNING, "Input must be an integer.");
 					alert.showAndWait().filter(response -> response == ButtonType.OK);
 				}
+
 			}
+
 		});
 	}
 }
