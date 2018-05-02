@@ -3,6 +3,7 @@ package application;
 public class Team {
 	private String teamName;
 	private int seed;
+	private int score;
 	
 	/**
 	 * default no arg constructor
@@ -36,5 +37,13 @@ public class Team {
 	 */
 	public int getSeed() {
 		return seed;
+	}
+	
+	public int getScore(){
+		return score;
+	}
+	
+	public void setScore(int score){
+		this.score = score;	
 	}
 }
