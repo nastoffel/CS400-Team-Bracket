@@ -1,6 +1,25 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+// Main Class File: Main.java
+// File:            Bracket.java
+// Semester:        Spring 2018
+//
+// Authors:         Nick Stoffel, Erik Umhoefer,  Stephen Squires III,
+//                  Tyler Snoberger
+// Lecturer's Name: Deb Deppeler
+//
+///////////////////////////////////////////////////////////////////////////////
 package application;
 import java.util.ArrayList;
 
+/**
+ * This class provides Teams for the main class
+ * 
+ * @author Nick Stoffel
+ * @author Erik Umhoefer
+ * @author Stephen Squires III
+ * @author Tyler Snoberger
+ */
 public class Bracket {
 	private Team[][] bracket;
 	private int round;
@@ -167,7 +186,7 @@ public class Bracket {
 					ret += "    |";
 
 			}
-			
+
 			ret += "\n";
 			ret += "---------------------------\n";
 
@@ -180,7 +199,7 @@ public class Bracket {
 	public int getNumTeams() {
 		return numOfTeams;
 	}
-	
+
 	/*
 	 * @return the current round of the bracket
 	 */
@@ -188,7 +207,7 @@ public class Bracket {
 	{
 		return currentRound;
 	}
-	
+
 	/*
 	 * Increments to next round
 	 */
@@ -196,7 +215,7 @@ public class Bracket {
 	{
 		currentRound++;
 	}
-	
+
 	/*
 	 * @return the team at x,y of the bracket[][] array
 	 */
@@ -206,7 +225,7 @@ public class Bracket {
 		else
 			return bracket[x][y];
 	}
-	
+
 	/*
 	 * @return the team name (String) of the team at bracket[x][y]
 	 */

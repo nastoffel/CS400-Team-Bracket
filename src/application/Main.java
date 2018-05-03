@@ -1,3 +1,14 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+// Main Class File: Main.java
+// File:            Main.java
+// Semester:        Spring 2018
+//
+// Authors:         Nick Stoffel, Erik Umhoefer,  Stephen Squires III,
+//                  Tyler Snoberger
+// Lecturer's Name: Deb Deppeler
+//
+///////////////////////////////////////////////////////////////////////////////
 package application;
 
 import java.io.File;
@@ -6,39 +17,29 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 
+/**
+ * This class is the main driver method for the GUI
+ * 
+ * @author Nick Stoffel
+ * @author Erik Umhoefer
+ * @author Stephen Squires III
+ * @author Tyler Snoberger
+ */
 public class Main extends Application {
 
 	private static Bracket bball;
@@ -49,11 +50,9 @@ public class Main extends Application {
 	private Label[][] gameLabels;
 	private Label winner, second, third;
 
-	
-	/*
-	 * (non-Javadoc)
+	/**
 	 * @see javafx.application.Application#start(javafx.stage.Stage)
-	 * Creates the stage / shows the GUI application
+	 * Creates the stage / shows the GUI application.
 	 */
 	@Override
 	public void start(Stage primaryStage) {
@@ -70,15 +69,18 @@ public class Main extends Application {
 		}
 	}
 
+	/**
+	 * Main method of the program, sets up the teams and bracket from
+	 * a file path from args[0] or a hardcoded file path.
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		ArrayList<String> teams = new ArrayList<String>();
 
 		if (args.length == 0) {
-			File file = new File("\\src\\application\\16Team"); // Change the
-																										// name to
-																										// get the
-																										// correct
-																										// team#
+			File file = new File("src\\application\\16Team.txt"); // Change the
+			// name to get the correct team#
 			try {
 				Scanner scan = new Scanner(file);
 				while (scan.hasNextLine()) {
@@ -88,7 +90,8 @@ public class Main extends Application {
 			} catch (FileNotFoundException e) {
 				System.out.println("file not found");
 			}
-		} else {
+		}
+		else {
 			File file = new File(args[0]);
 			try {
 				Scanner scan = new Scanner(file);
@@ -125,8 +128,8 @@ public class Main extends Application {
 
 	}
 
-	/*
-	 * Initial setup of bracket - loads teams and adds components to GUI
+	/**
+	 * Initial setup of bracket - loads teams and adds components to GUI.
 	 */
 	private void slotSetup() {
 
@@ -151,7 +154,7 @@ public class Main extends Application {
 				// Initializes children for gridpane
 				for (int i = 0; i < numTeams; i++) {
 					teamLabels[i][0] = new Label(bball.getTeamName(i, 0)); // These inner-for loop lines put in the
-																			// initial teams
+					// initial teams
 					teamScores[i][0] = new TextField();
 					teamLabels[i][0].setMinWidth(50);
 					teamScores[i][0].setMaxWidth(75);
@@ -162,7 +165,7 @@ public class Main extends Application {
 						if (j == 3) {
 							if (i < 2) {
 								teamLabels[i][j] = new Label("Winner Prev Game "); // Label for winner of the previous
-																					// game
+								// game
 								teamScores[i][j] = new TextField(); // Blank score text field
 								teamScores[i][j].setMaxWidth(75);
 								if (i % 2 == 0)
@@ -174,7 +177,7 @@ public class Main extends Application {
 							if (i < numTeams / (j + 1)) { // Only puts in children for the amount of games to be played
 
 								teamLabels[i][j] = new Label("Winner Prev Game "); // Label for winner of the previous
-																					// game
+								// game
 								teamScores[i][j] = new TextField(); // Blank score text field
 								teamScores[i][j].setMaxWidth(75);
 								if (i % 2 == 0)
@@ -231,8 +234,10 @@ public class Main extends Application {
 
 	}
 
-	/*
-	 * @parameter String s is the input of the text label to be determined
+	/**
+	 * Returns true if the string only has digits in it
+	 * 
+	 * @param s The input of the text label to be determined
 	 * if it is an integer / acceptable number
 	 * @return true if the input is a number / acceptable input
 	 */
@@ -246,7 +251,7 @@ public class Main extends Application {
 		return true;
 	}
 
-	
+
 	/*
 	 * Handler method for each match that handles all user input / interaction and it's associated output / effect on the GUI
 	 * @parameter submit is the submit button of the current match
@@ -254,7 +259,20 @@ public class Main extends Application {
 	 * @parameter team1Score is the score found in the textfield of the current match for team1
 	 * @parameter team2 is the label of team2 of the current match
 	 * @parameter team2Score is the score found in the textfield of the current match for team2
-	 *@parameter win is the label in the next round of the bracket that will be the winner of the current match
+	 * @parameter win is the label in the next round of the bracket that will be the winner of the current match
+	 */
+	/**
+	 * Handler method for each match that handles all user input / interaction and it's associated output / effect on the GUI.
+	 * 
+	 * @param submit The submit button of the current match.
+	 * @param team1 The label of team1 of the current match.
+	 * @param team1Score The score found in the textfield of the current match for team1.
+	 * @param team2 The label of team2 of the current match.
+	 * @param team2Score The score found in the textfield of the current match for team2.
+	 * @param win The label in the next round of the bracket that will be the winner of the current match.
+	 * @param next The submit button of the next match.
+	 * @param row Row of the team.
+	 * @param col Column of the team.
 	 */
 	private void action(Button submit, Label team1, TextField team1Score, Label team2, TextField team2Score, Label win,
 			Button next, int row, int col) {
@@ -288,11 +306,11 @@ public class Main extends Application {
 						team2Score.setEditable(false);
 						submit.setText(""); //Close submit button
 						//Set submit button of next match to submit
-						if (next.getText().equals("Needs Other Team"))
+						if (next.getText().equals(" "))
 							next.setText("Submit");
 						//Match that constitutes other team in next match not submitted yet
 						else
-							next.setText("Needs Other Team");
+							next.setText(" ");
 					}
 					//Team scores are the same, portray alert message
 					else if (Integer.valueOf(team1Score.getText()) == Integer.valueOf(team2Score.getText())) {
@@ -313,11 +331,11 @@ public class Main extends Application {
 						team2Score.setEditable(false);
 						submit.setText("");
 						//Set submit button of next match to submit
-						if (next.getText().equals("Needs Other Team"))
+						if (next.getText().equals(" "))
 							next.setText("Submit");
 						//Match that constitutes other team in next match not submitted yet
 						else
-							next.setText("Needs Other Team");
+							next.setText(" ");
 					}
 
 				}
@@ -331,19 +349,35 @@ public class Main extends Application {
 		});
 	}
 
-	/*
-	 * Handler method for the final placings of the match. Displays first, second, and third place champions
+	/**
+	 * Handler method for the final placings of the match. Displays first, second, and third place champions.
 	 * 
+	 * @param submit The submit button of the current match.
+	 * @param team1 The label of team1 of the current match.
+	 * @param team1Score The score found in the textfield of the current match for team1.
+	 * @param team2 The label of team2 of the current match.
+	 * @param team2Score The score found in the textfield of the current match for team2.
+	 * @param row Row of the team.
+	 * @param col Column of the team.
 	 */
 	private void winnerAction(Button submit, Label team1, TextField team1Score, Label team2, TextField team2Score,
 			int row, int col) {
 		submit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
+				/*
+				 * Checks if both games that will constitute the next match have been finished
+				 * If only one match has been finished / submitted, an alert is portrayed
+				 */
 				if (!(submit.getText().equals("Submit"))) {
 					Alert alert = new Alert(AlertType.WARNING, "Cannot submit without previous games played.");
 					alert.showAndWait().filter(response -> response == ButtonType.OK);
-				} else if (isNum(team1Score.getText()) && isNum(team2Score.getText())) {
+				}
+				/*
+				 * Both matches that will constitute the next match have been submitted / finished
+				 */
+				else if (isNum(team1Score.getText()) && isNum(team2Score.getText())) {
+					//Team 1 is the winner of the match
 					if (Integer.valueOf(team1Score.getText()) > Integer.valueOf(team2Score.getText())) {
 						if (bball.getNumTeams() > 2) {
 							String thirdPlace = "";
@@ -370,17 +404,21 @@ public class Main extends Application {
 						submit.setText("");
 						winner.setText(winner.getText() + team1.getText());
 						second.setText(second.getText() + team2.getText());
-					} else if (Integer.valueOf(team1Score.getText()) == Integer.valueOf(team2Score.getText())) {
+					}
+					//Team scores are the same, portray alert message
+					else if (Integer.valueOf(team1Score.getText()) == Integer.valueOf(team2Score.getText())) {
 						Alert alert = new Alert(AlertType.WARNING, "Team Scores are the same.");
 						alert.showAndWait().filter(response -> response == ButtonType.OK);
 					} else {
 						if (bball.getNumTeams() > 2) {
 							String thirdPlace = "";
+							//Gets the next highest score of the Semi-Finals that wasn't the 2 winners
 							double maxScore = (int) Math.max(
 									Math.min(bball.getTeam(row, col - 1).getScore(),
 											bball.getTeam(row + 1, col - 1).getScore()),
 									Math.min(bball.getTeam(row + 2, col - 1).getScore(),
 											bball.getTeam(row + 3, col - 1).getScore()));
+							//Sets thirdPlace to be the correct 3rd place team.
 							if (bball.getTeam(row, col - 1).getScore() == maxScore) {
 								thirdPlace = bball.getTeam(row, col - 1).getTeamName();
 							} else if (bball.getTeam(row + 1, col - 1).getScore() == maxScore) {
@@ -399,7 +437,9 @@ public class Main extends Application {
 						second.setText(second.getText() + team1.getText());
 					}
 
-				} else {
+				}
+				//Incorrect input, portrays an error message
+				else {
 					Alert alert = new Alert(AlertType.WARNING, "Input must be an integer.");
 					alert.showAndWait().filter(response -> response == ButtonType.OK);
 				}
