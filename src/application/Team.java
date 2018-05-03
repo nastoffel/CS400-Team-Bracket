@@ -39,10 +39,15 @@ public class Team {
 		return seed;
 	}
 	
+	/*
+	 * @return score of current game
+	 */
 	public int getScore(){
 		return score;
 	}
-	
+	/*
+	 * Sets score of the current game
+	 */
 	public void setScore(int score){
 		this.score = score;	
 	}

@@ -49,6 +49,12 @@ public class Main extends Application {
 	private Label[][] gameLabels;
 	private Label winner, second, third;
 
+	
+	/*
+	 * (non-Javadoc)
+	 * @see javafx.application.Application#start(javafx.stage.Stage)
+	 * Creates the stage / shows the GUI application
+	 */
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -119,6 +125,9 @@ public class Main extends Application {
 
 	}
 
+	/*
+	 * Initial setup of bracket - loads teams and adds components to GUI
+	 */
 	private void slotSetup() {
 
 		int numTeams = bball.getNumTeams(); // Used for # of rows for arrays
@@ -178,6 +187,7 @@ public class Main extends Application {
 
 				int games = 0;
 
+				//Creates labels for each match
 				for (int col = 0; col < numRounds - 1; col++) {
 					for (int row = 0; row < numTeams / Math.pow(2, col + 1); row++) {
 						games++;
@@ -221,6 +231,11 @@ public class Main extends Application {
 
 	}
 
+	/*
+	 * @parameter String s is the input of the text label to be determined
+	 * if it is an integer / acceptable number
+	 * @return true if the input is a number / acceptable input
+	 */
 	private boolean isNum(String s) {
 		if (s.isEmpty())
 			return false;
@@ -231,56 +246,95 @@ public class Main extends Application {
 		return true;
 	}
 
+	
+	/*
+	 * Handler method for each match that handles all user input / interaction and it's associated output / effect on the GUI
+	 * @parameter submit is the submit button of the current match
+	 * @parameter team1 is the label of team1 of the current match
+	 * @parameter team1Score is the score found in the textfield of the current match for team1
+	 * @parameter team2 is the label of team2 of the current match
+	 * @parameter team2Score is the score found in the textfield of the current match for team2
+	 *@parameter win is the label in the next round of the bracket that will be the winner of the current match
+	 */
 	private void action(Button submit, Label team1, TextField team1Score, Label team2, TextField team2Score, Label win,
 			Button next, int row, int col) {
 		submit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
+				/*
+				 * Checks if both games that will constitute the next match have been finished
+				 * If only one match has been finished / submitted, an alert is portrayed
+				 */
 				if (!(submit.getText().equals("Submit") || next.getText().equals("Needs Other Team"))) {
 					Alert alert = new Alert(AlertType.WARNING, "Cannot submit without previous games played.");
 					alert.showAndWait().filter(response -> response == ButtonType.OK);
-				} else if (isNum(team1Score.getText()) && isNum(team2Score.getText())) {
+				} 
+				/*
+				 * Both matches that will constitute the next match have been submitted / finished
+				 */
+				else if (isNum(team1Score.getText()) && isNum(team2Score.getText())) {
+					//Team 1 is the winner of the match
 					if (Integer.valueOf(team1Score.getText()) > Integer.valueOf(team2Score.getText())) {
+						//Set score of team 1 to score in text field
 						bball.getTeam(row, col).setScore(Integer.parseInt(team1Score.getText()));
+						//Set score of team 2 to score in text field
 						bball.getTeam(row + 1, col).setScore(Integer.parseInt(team2Score.getText()));
+						//Update the winner in bracket to team1
 						bball.updateWinner(row + 1, Integer.parseInt(team2Score.getText()),
 								Integer.parseInt(team1Score.getText()));
+						//Set text of label for next match to the winner (team 1)
 						win.setText(team1.getText());
 						team1Score.setEditable(false);
 						team2Score.setEditable(false);
-						submit.setText("");
+						submit.setText(""); //Close submit button
+						//Set submit button of next match to submit
 						if (next.getText().equals("Needs Other Team"))
 							next.setText("Submit");
+						//Match that constitutes other team in next match not submitted yet
 						else
 							next.setText("Needs Other Team");
-					} else if (Integer.valueOf(team1Score.getText()) == Integer.valueOf(team2Score.getText())) {
+					}
+					//Team scores are the same, portray alert message
+					else if (Integer.valueOf(team1Score.getText()) == Integer.valueOf(team2Score.getText())) {
 						Alert alert = new Alert(AlertType.WARNING, "Team Scores are the same.");
 						alert.showAndWait().filter(response -> response == ButtonType.OK);
-					} else {
+					}
+					//Team 2 is the winner of the match
+					else {
+						//Set score of team 1 to score in text field
 						bball.getTeam(row, col).setScore(Integer.parseInt(team1Score.getText()));
+						//Set score of team 2 to score in text field
 						bball.getTeam(row + 1, col).setScore(Integer.parseInt(team2Score.getText()));
+						//Update the winner in bracket to team2
 						bball.updateWinner(row + 1, Integer.parseInt(team2Score.getText()),
 								Integer.parseInt(team1Score.getText()));
 						win.setText(team2.getText());
 						team1Score.setEditable(false);
 						team2Score.setEditable(false);
 						submit.setText("");
+						//Set submit button of next match to submit
 						if (next.getText().equals("Needs Other Team"))
 							next.setText("Submit");
+						//Match that constitutes other team in next match not submitted yet
 						else
 							next.setText("Needs Other Team");
 					}
 
-				} else {
+				}
+				//Incorrect input, portrays an error message
+				else {
 					Alert alert = new Alert(AlertType.WARNING, "Input must be an integer.");
 					alert.showAndWait().filter(response -> response == ButtonType.OK);
 				}
-				System.out.print(bball);
 			}
 
 		});
 	}
 
+	/*
+	 * Handler method for the final placings of the match. Displays first, second, and third place champions
+	 * 
+	 */
 	private void winnerAction(Button submit, Label team1, TextField team1Score, Label team2, TextField team2Score,
 			int row, int col) {
 		submit.setOnAction(new EventHandler<ActionEvent>() {

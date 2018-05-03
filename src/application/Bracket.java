@@ -174,24 +174,42 @@ public class Bracket {
 		}
 		return ret;
 	}
-	
+	/*
+	 * @return number of teams in the bracket
+	 */
 	public int getNumTeams() {
 		return numOfTeams;
 	}
+	
+	/*
+	 * @return the current round of the bracket
+	 */
 	public int getCurrRound()
 	{
 		return currentRound;
 	}
+	
+	/*
+	 * Increments to next round
+	 */
 	public void nextRound()
 	{
 		currentRound++;
 	}
+	
+	/*
+	 * @return the team at x,y of the bracket[][] array
+	 */
 	public Team getTeam(int x, int y) {
 		if(x < 0 || x >= numOfTeams || y < 0 || y >= bracket[0].length) 
 			throw new ArrayIndexOutOfBoundsException();
 		else
 			return bracket[x][y];
 	}
+	
+	/*
+	 * @return the team name (String) of the team at bracket[x][y]
+	 */
 	public String getTeamName(int x, int y) {
 		if(x < 0 || x >= numOfTeams || y < 0 || y >= bracket[0].length) 
 			throw new ArrayIndexOutOfBoundsException();
